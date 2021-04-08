@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:APOD/models/apodModel.dart';
 import 'package:APOD/networking/apiRequestStatus.dart';
 import 'package:APOD/networking/requestService.dart';
@@ -14,7 +12,7 @@ class ApodProvider extends ChangeNotifier {
   DateTime endDate = DateTime.now();
   DateFormat formatter = new DateFormat('yyyy-MM-dd');
   ApodService service = ApodService();
-
+  String error = '';
   Future<void> getApod(BuildContext context) async {
     String formattedStartDate = formatter.format(startDate);
     String formattedEndDate = formatter.format(endDate);
@@ -33,6 +31,7 @@ class ApodProvider extends ChangeNotifier {
                   )));
     } catch (e) {
       status = ApiRequestStatus.error;
+      error = e.toString();
       notifyListeners();
     }
   }
