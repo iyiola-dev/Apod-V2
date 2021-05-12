@@ -29,6 +29,8 @@ class ApodProvider extends ChangeNotifier {
               builder: (context) => ApodView(
                     apod: model,
                   )));
+      status = ApiRequestStatus.uninitialized;
+      notifyListeners();
     } catch (e) {
       status = ApiRequestStatus.error;
       error = e.toString();

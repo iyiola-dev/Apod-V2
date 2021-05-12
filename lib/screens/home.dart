@@ -1,4 +1,5 @@
 import 'package:APOD/utils/constants/providers.dart';
+import 'package:APOD/utils/widgets/bodyBuilder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -9,14 +10,17 @@ class Home extends ConsumerWidget {
     String firstDate = viewModel.formatter.format(viewModel.startDate);
     String secondDate = viewModel.formatter.format(viewModel.endDate);
     return Scaffold(
+      backgroundColor: Colors.black45,
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
         padding: const EdgeInsets.all(12),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 InkWell(
                   onTap: () {
@@ -29,12 +33,15 @@ class Home extends ConsumerWidget {
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(color: Colors.grey),
                     ),
-                    child: Text(firstDate),
+                    child: Center(
+                        child: Text(
+                      firstDate,
+                      style: TextStyle(color: Colors.white.withOpacity(0.6)),
+                    )),
                   ),
                 ),
-                Text(
-                  '\n-',
-                  style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+                SizedBox(
+                  width: 20,
                 ),
                 InkWell(
                   onTap: () {
@@ -47,10 +54,32 @@ class Home extends ConsumerWidget {
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(color: Colors.grey),
                     ),
-                    child: Text(secondDate),
+                    child: Center(
+                        child: Text(
+                      secondDate,
+                      style: TextStyle(color: Colors.white.withOpacity(0.6)),
+                    )),
                   ),
                 ),
               ],
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            BodyBuilder(
+              child: SizedBox.shrink(),
+              apiRequestStatus: viewModel.status,
+              loadingWidget: Center(
+                child: CircularProgressIndicator(),
+              ),
+              initialWidget: FlatButton(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10)),
+                  color: Colors.white.withOpacity(0.6),
+                  onPressed: () => context.read(home).getApod(context),
+                  child: Text('Next')),
+              error: viewModel.error,
+              reload: () => context.read(home).getApod(context),
             )
           ],
         ),
